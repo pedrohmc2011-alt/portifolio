@@ -3,12 +3,444 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pedro Henrique — Engenheiro Aeronáutico</title>
+<title>Pedro Henrique — Projetista</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#020810;--bg2:#050d1a;--navy:#0a1628;
+  --bg:#020810;--bg2:#050d1a;--navy:#0a1628;<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedro Henrique — Projetista Aeronáutico</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#020509;--surface:#07111f;--card:#0b1a2e;
+  --blue:#0ea5e9;--blue2:#38bdf8;
+  --gold:#f59e0b;--gold2:#fbbf24;
+  --white:#f1f5f9;--muted:#4a6080;
+  --border:rgba(14,165,233,.15);--glow:rgba(14,165,233,.35);
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--white);font-family:'Outfit',sans-serif;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cur{position:fixed;width:8px;height:8px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;box-shadow:0 0 12px var(--blue)}
+#cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(14,165,233,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+.big-cur #cur{width:18px;height:18px;background:var(--gold);box-shadow:0 0 20px var(--gold)}
+.big-cur #cur-ring{width:50px;height:50px;border-color:rgba(245,158,11,.5)}
+
+/* CANVAS */
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px 6vw;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+nav.stuck{background:rgba(2,5,9,.9);backdrop-filter:blur(20px);border-color:var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--blue);transition:width .3s}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{width:100%}
+
+/* HERO */
+#hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;padding:0 6vw}
+.hero-inner{max-width:900px}
+.hero-tag{display:inline-flex;align-items:center;gap:10px;font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:28px;opacity:0;animation:up .7s .2s ease forwards}
+.hero-tag::before{content:'';width:28px;height:1px;background:var(--blue)}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,13vw,11rem);line-height:.88;letter-spacing:2px;color:var(--white);opacity:0;animation:up .8s .4s ease forwards}
+.hero-name .stroke{-webkit-text-stroke:1px rgba(241,245,249,.2);color:transparent}
+.hero-name .hi{color:var(--blue)}
+.hero-sub{font-family:'Crimson Pro',serif;font-style:italic;font-weight:300;font-size:1.3rem;color:var(--muted);max-width:500px;line-height:1.7;margin-top:28px;opacity:0;animation:up .8s .65s ease forwards}
+.hero-btns{display:flex;gap:14px;margin-top:44px;flex-wrap:wrap;opacity:0;animation:up .8s .85s ease forwards}
+.btn{padding:13px 30px;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;font-family:'Outfit',sans-serif;font-weight:600;text-decoration:none;cursor:none;transition:transform .25s,box-shadow .25s;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.btn:hover{transform:translateY(-3px)}
+.btn-fill{background:var(--blue);color:var(--bg)}
+.btn-fill:hover{box-shadow:0 8px 32px rgba(14,165,233,.4)}
+.btn-ghost{border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{color:var(--white);border-color:rgba(14,165,233,.4)}
+.hero-deco{position:absolute;right:6vw;top:50%;transform:translateY(-50%);opacity:0;animation:fadein 1.2s 1.2s ease forwards}
+.deco-circle{width:220px;height:220px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;animation:spin 25s linear infinite}
+.deco-circle::before{content:'';position:absolute;width:10px;height:10px;background:var(--blue);border-radius:50%;top:-5px;left:50%;transform:translateX(-50%);box-shadow:0 0 14px var(--blue)}
+.deco-circle::after{content:'';position:absolute;width:6px;height:6px;background:var(--gold);border-radius:50%;bottom:-3px;right:30px;box-shadow:0 0 10px var(--gold)}
+.deco-inner{text-align:center;animation:spin 25s linear infinite reverse}
+.deco-inner b{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--blue);display:block;line-height:1}
+.deco-inner span{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.scroll-arrow{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:fadein 1s 1.5s ease forwards}
+.scroll-arrow span{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.arrow-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--blue),transparent);animation:ap 1.8s ease infinite}
+@keyframes ap{0%,100%{opacity:.2;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
+
+/* SECTIONS */
+.section{position:relative;z-index:1;padding:110px 6vw}
+.eyebrow{font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:var(--blue);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--blue)}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);letter-spacing:2px;color:var(--white);line-height:1;margin-bottom:60px}
+.sec-title em{font-family:'Crimson Pro',serif;font-style:italic;font-weight:300;color:var(--gold);font-size:.85em}
+
+/* ABOUT */
+#about{display:grid;grid-template-columns:1fr 440px;gap:80px;align-items:start}
+.about-text{font-family:'Crimson Pro',serif;font-size:1.15rem;line-height:1.85;color:var(--muted);margin-bottom:18px}
+.about-text strong{color:var(--white);font-weight:400}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:48px}
+.stat{background:var(--bg);padding:24px 20px;text-align:center}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--white);display:block;line-height:1}
+.stat-n span{color:var(--blue)}
+.stat-l{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.tech-card{background:var(--card);border:1px solid var(--border);padding:32px;position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));transition:transform .35s}
+.tech-card:hover{transform:translateY(-6px)}
+.tech-card::after{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:2px;background:linear-gradient(90deg,var(--blue),var(--gold),var(--blue));background-size:200%;animation:shimmer 3s linear infinite}
+@keyframes shimmer{to{background-position:200% 0}}
+.card-label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:22px;display:flex;align-items:center;gap:7px}
+.dot-live{width:5px;height:5px;background:var(--blue);border-radius:50%;box-shadow:0 0 8px var(--blue);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px}
+.sw{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(14,165,233,.05);border:1px solid rgba(14,165,233,.1);transition:border-color .25s,background .25s}
+.sw:hover{border-color:rgba(14,165,233,.35);background:rgba(14,165,233,.1)}
+.sw-d{width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0}
+.sw-d.gold{background:var(--gold)}
+.sw-n{font-size:.72rem;color:var(--white)}
+.bars{display:flex;flex-direction:column;gap:14px}
+.bar-head{display:flex;justify-content:space-between;margin-bottom:5px}
+.bar-name{font-size:.68rem;color:var(--white);letter-spacing:.5px}
+.bar-pct{font-size:.62rem;color:var(--blue)}
+.bar-track{height:2px;background:rgba(255,255,255,.06);overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.4,0,.2,1)}
+
+/* EXPERIENCE */
+#experience{max-width:820px;margin:0 auto}
+.tl{position:relative}
+.tl::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--blue),transparent)}
+.tl-item{padding-left:44px;margin-bottom:56px;position:relative;opacity:0;transform:translateX(-16px);transition:opacity .7s,transform .7s}
+.tl-item.on{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-5px;top:8px;width:11px;height:11px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(14,165,233,.25),0 0 16px var(--glow)}
+.tl-when{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.tl-role{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;color:var(--white);margin-bottom:4px}
+.tl-org{font-size:.75rem;letter-spacing:1px;color:var(--gold);margin-bottom:14px}
+.tl-desc{font-family:'Crimson Pro',serif;font-size:1rem;line-height:1.75;color:var(--muted);max-width:560px}
+.tl-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chip{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(14,165,233,.2);color:rgba(14,165,233,.8)}
+
+/* EDUCATION */
+#education .edu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.edu-card{background:var(--card);border:1px solid var(--border);padding:32px 24px;position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);transition:transform .35s,border-color .35s}
+.edu-card:hover{transform:translateY(-8px);border-color:rgba(14,165,233,.4)}
+.edu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.edu-card:hover::before{transform:scaleX(1)}
+.edu-n{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:rgba(14,165,233,.07);position:absolute;top:10px;right:14px;line-height:1;pointer-events:none}
+.edu-deg{font-size:.88rem;font-weight:600;color:var(--white);line-height:1.35;margin-bottom:12px}
+.edu-school{font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.edu-period{font-size:.62rem;letter-spacing:1px;color:var(--muted);background:rgba(255,255,255,.04);padding:3px 8px;display:inline-block;margin-top:6px}
+.edu-status{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-top:14px;display:flex;align-items:center;gap:6px}
+
+/* SKILLS */
+.marquee-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:16px 0;margin-top:50px}
+.marquee{display:flex;width:max-content;animation:marquee 20s linear infinite}
+.marquee:hover{animation-play-state:paused}
+.m-chip{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;padding:8px 24px;white-space:nowrap;border-right:1px solid var(--border);color:var(--muted);transition:color .25s;cursor:default}
+.m-chip:hover{color:var(--blue)}
+.m-chip.g{color:rgba(245,158,11,.6)}
+.m-chip.g:hover{color:var(--gold)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.skills-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:56px}
+.skills-col-title{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--white);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+
+/* CONTACT */
+#contact{text-align:center}
+.contact-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,7rem);letter-spacing:3px;line-height:.9;color:var(--white);margin-bottom:16px}
+.contact-big .hollow{-webkit-text-stroke:1px rgba(241,245,249,.2);color:transparent}
+.contact-big .accent{color:var(--blue)}
+.contact-tagline{font-family:'Crimson Pro',serif;font-style:italic;font-size:1.1rem;color:var(--muted);max-width:400px;margin:0 auto 48px}
+.contact-card{max-width:480px;margin:0 auto;background:var(--card);border:1px solid var(--border);padding:40px;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));position:relative}
+.contact-card::after{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:2px;background:linear-gradient(90deg,var(--blue),var(--gold))}
+.c-item{display:flex;align-items:center;justify-content:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);font-size:.82rem;color:var(--white);text-decoration:none;transition:color .25s}
+.c-item:last-child{border-bottom:none}
+.c-item:hover{color:var(--blue)}
+.c-icon{width:30px;height:30px;background:rgba(14,165,233,.08);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:background .25s,border-color .25s}
+.c-item:hover .c-icon{background:rgba(14,165,233,.18);border-color:rgba(14,165,233,.4)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;padding:28px 6vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.foot-l{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.foot-dot{width:4px;height:4px;background:var(--blue);border-radius:50%;box-shadow:0 0 8px var(--blue)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.on{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}
+.reveal.d2{transition-delay:.2s}
+.reveal.d3{transition-delay:.3s}
+
+/* KEYFRAMES */
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<canvas id="cv"></canvas>
+
+<nav id="nav">
+  <a class="nav-logo" href="#hero">PH<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Sobre</a></li>
+    <li><a href="#experience">Experiência</a></li>
+    <li><a href="#education">Formação</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Projetista · Pesquisador CNPq</div>
+    <h1 class="hero-name">
+      PEDRO<br>
+      <span class="stroke">HENRIQUE</span><span class="hi">.</span>
+    </h1>
+    <p class="hero-sub">Estruturas aeroespaciais, simulação computacional e análise pelo Método dos Elementos Finitos — projetando o futuro, componente por componente.</p>
+    <div class="hero-btns">
+      <a href="#experience" class="btn btn-fill">Ver experiência</a>
+      <a href="#contact" class="btn btn-ghost">Entrar em contato</a>
+    </div>
+  </div>
+  <div class="hero-deco">
+    <div class="deco-circle">
+      <div class="deco-inner"><b>MEF</b><span>CAD · CAE · FEM</span></div>
+    </div>
+  </div>
+  <div class="scroll-arrow"><span>scroll</span><div class="arrow-line"></div></div>
+</section>
+
+<section id="about" class="section">
+  <div>
+    <div class="reveal">
+      <div class="eyebrow">Sobre mim</div>
+      <div class="sec-title">Precisão<br>em cada <em>cálculo.</em></div>
+    </div>
+    <p class="about-text reveal d1">Projetista em formação com foco em <strong>análise e projetos de estruturas aeroespaciais</strong>. Atualmente pesquisador no CNPq, aplicando MEF à simulação de processos de usinagem.</p>
+    <p class="about-text reveal d2">Minha abordagem une rigor matemático com ferramentas de ponta como <strong>CATIA V5, 3D Experience e ABAQUS CAE</strong> — desenvolvendo soluções para a indústria aeronáutica e de defesa.</p>
+    <div class="stats reveal d3">
+      <div class="stat"><span class="stat-n" data-to="2">0<span>+</span></span><span class="stat-l">cursos simultâneos</span></div>
+      <div class="stat"><span class="stat-n" data-to="6">0<span>+</span></span><span class="stat-l">softwares dominados</span></div>
+      <div class="stat"><span class="stat-n" data-to="1">0</span><span class="stat-l">pesquisa CNPq</span></div>
+    </div>
+  </div>
+  <div class="tech-card reveal d2">
+    <div class="card-label"><span class="dot-live"></span>Arsenal Técnico</div>
+    <div class="sw-grid">
+      <div class="sw"><span class="sw-d"></span><span class="sw-n">CATIA V5</span></div>
+      <div class="sw"><span class="sw-d"></span><span class="sw-n">3D Experience</span></div>
+      <div class="sw"><span class="sw-d"></span><span class="sw-n">ABAQUS CAE</span></div>
+      <div class="sw"><span class="sw-d"></span><span class="sw-n">MEF / FEA</span></div>
+      <div class="sw"><span class="sw-d gold"></span><span class="sw-n">Sim. Usinagem</span></div>
+      <div class="sw"><span class="sw-d gold"></span><span class="sw-n">Inglês Técnico</span></div>
+    </div>
+    <div class="bars">
+      <div class="bar-row"><div class="bar-head"><span class="bar-name">Modelagem CAD</span><span class="bar-pct">90%</span></div><div class="bar-track"><div class="bar-fill" data-w=".9"></div></div></div>
+      <div class="bar-row"><div class="bar-head"><span class="bar-name">Análise MEF</span><span class="bar-pct">85%</span></div><div class="bar-track"><div class="bar-fill" data-w=".85"></div></div></div>
+      <div class="bar-row"><div class="bar-head"><span class="bar-name">Simulação Numérica</span><span class="bar-pct">80%</span></div><div class="bar-track"><div class="bar-fill" data-w=".8"></div></div></div>
+      <div class="bar-row"><div class="bar-head"><span class="bar-name">Desenho Técnico</span><span class="bar-pct">88%</span></div><div class="bar-track"><div class="bar-fill" data-w=".88"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="section" style="background:linear-gradient(to bottom,transparent,rgba(7,17,31,.6),transparent)">
+  <div style="max-width:820px;margin:0 auto">
+    <div class="reveal"><div class="eyebrow">Trajetória</div><div class="sec-title">Experiência <em>Profissional</em></div></div>
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-when">2025 — Presente</div>
+        <div class="tl-role">Pesquisador em Simulação de Processos de Usinagem</div>
+        <div class="tl-org">CNPq — Conselho Nacional de Desenvolvimento Científico e Tecnológico</div>
+        <p class="tl-desc">Desenvolvimento de pesquisa aplicada à simulação computacional de processos de usinagem, com modelagem de fenômenos físicos, análise de parâmetros de corte e validação numérica via Método dos Elementos Finitos. Geração de dados para otimização de ferramentas e processos industriais.</p>
+        <div class="tl-chips">
+          <span class="chip">MEF</span><span class="chip">Usinagem</span><span class="chip">Simulação Numérica</span><span class="chip">Pesquisa Aplicada</span><span class="chip">ABAQUS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education" class="section">
+  <div class="reveal"><div class="eyebrow">Formação</div><div class="sec-title">Base <em>Acadêmica</em></div></div>
+  <div class="edu-grid">
+    <div class="edu-card reveal d1">
+      <div class="edu-n">01</div>
+      <div class="edu-deg">Tecnologia em Projetos de Estruturas Aeronáuticas</div>
+      <div class="edu-school">Fatec São José dos Campos</div>
+      <span class="edu-period">2024 — 2026 · 3º Sem. Noturno</span>
+      <div class="edu-status"><span class="dot-live"></span>Cursando</div>
+    </div>
+    <div class="edu-card reveal d2">
+      <div class="edu-n">02</div>
+      <div class="edu-deg">Engenharia de Produção</div>
+      <div class="edu-school">UNICID</div>
+      <span class="edu-period">2024 — 2026 · 3º Semestre</span>
+      <div class="edu-status"><span class="dot-live"></span>Cursando</div>
+    </div>
+    <div class="edu-card reveal d3">
+      <div class="edu-n">03</div>
+      <div class="edu-deg">Ensino Médio Regular</div>
+      <div class="edu-school">Colégio Atheneu</div>
+      <span class="edu-period">Concluído</span>
+      <div class="edu-status" style="color:var(--gold)"><span style="width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block"></span>Concluído</div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="section">
+  <div class="reveal"><div class="eyebrow">Competências</div><div class="sec-title">Stack <em>Técnico</em></div></div>
+  <div class="marquee-wrap">
+    <div class="marquee">
+      <span class="m-chip">CATIA V5</span><span class="m-chip g">3D Experience</span><span class="m-chip">ABAQUS CAE</span><span class="m-chip">Método dos Elementos Finitos</span><span class="m-chip g">Simulação de Usinagem</span><span class="m-chip">Desenho Técnico</span><span class="m-chip">Mecânica dos Materiais</span><span class="m-chip g">Cálculo Estrutural</span><span class="m-chip">Inglês Técnico</span><span class="m-chip">Resistência dos Materiais</span>
+      <span class="m-chip">CATIA V5</span><span class="m-chip g">3D Experience</span><span class="m-chip">ABAQUS CAE</span><span class="m-chip">Método dos Elementos Finitos</span><span class="m-chip g">Simulação de Usinagem</span><span class="m-chip">Desenho Técnico</span><span class="m-chip">Mecânica dos Materiais</span><span class="m-chip g">Cálculo Estrutural</span><span class="m-chip">Inglês Técnico</span><span class="m-chip">Resistência dos Materiais</span>
+    </div>
+  </div>
+  <div class="skills-cols reveal">
+    <div>
+      <div class="skills-col-title">Engenharia & Projeto</div>
+      <div class="bars">
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Modelagem CAD (CATIA/3DX)</span><span class="bar-pct">90%</span></div><div class="bar-track"><div class="bar-fill" data-w=".9"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Análise Estrutural MEF</span><span class="bar-pct">85%</span></div><div class="bar-track"><div class="bar-fill" data-w=".85"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Simulação de Usinagem</span><span class="bar-pct">80%</span></div><div class="bar-track"><div class="bar-fill" data-w=".8"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Desenho Técnico</span><span class="bar-pct">88%</span></div><div class="bar-track"><div class="bar-fill" data-w=".88"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Cálculo / Mecânica</span><span class="bar-pct">82%</span></div><div class="bar-track"><div class="bar-fill" data-w=".82"></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="skills-col-title">Perfil Profissional</div>
+      <div class="bars">
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Capacidade Analítica</span><span class="bar-pct">95%</span></div><div class="bar-track"><div class="bar-fill" data-w=".95"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Atenção a Detalhes</span><span class="bar-pct">92%</span></div><div class="bar-track"><div class="bar-fill" data-w=".92"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Trabalho em Equipe</span><span class="bar-pct">90%</span></div><div class="bar-track"><div class="bar-fill" data-w=".9"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Inglês Técnico</span><span class="bar-pct">78%</span></div><div class="bar-track"><div class="bar-fill" data-w=".78"></div></div></div>
+        <div class="bar-row"><div class="bar-head"><span class="bar-name">Adaptabilidade</span><span class="bar-pct">93%</span></div><div class="bar-track"><div class="bar-fill" data-w=".93"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="section">
+  <h2 class="contact-big reveal">VAMOS<br><span class="hollow">TRABALHAR</span><br>JUNTOS<span class="accent">.</span></h2>
+  <p class="contact-tagline reveal d1">Disponível para estágio, iniciação científica e colaborações na área aeroespacial.</p>
+  <div class="contact-card reveal d2">
+    <a class="c-item" href="#"><div class="c-icon">📍</div>São José dos Campos, SP — Brasil</a>
+    <a class="c-item" href="#"><div class="c-icon">🎓</div>Fatec SJC · UNICID — Cursando</a>
+    <a class="c-item" href="#"><div class="c-icon">🔬</div>Pesquisador CNPq — Ativo</a>
+    <a class="c-item" href="mailto:pedromelowork@gmail.com"><div class="c-icon">✉️</div>pedromelowork@gmail.com</a>
+    <a class="c-item" href="tel:+5511952786267"><div class="c-icon">📱</div>(11) 95278-6267</a>
+  </div>
+</section>
+
+<footer>
+  <span class="foot-l">© 2025 Pedro Henrique — Projetista</span>
+  <div class="foot-dot"></div>
+  <span class="foot-l">São José dos Campos · SP</span>
+</footer>
+
+<script>
+// CURSOR
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function loop(){
+  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.sw,.edu-card,.tech-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('big-cur'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('big-cur'));
+});
+
+// NAV
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('stuck',scrollY>60));
+
+// STARFIELD
+const canvas=document.getElementById('cv'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
+resize();window.addEventListener('resize',resize);
+const STARS=Array.from({length:180},()=>({
+  x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+  r:Math.random()*.9+.1,s:Math.random()*.12+.02,
+  o:Math.random()*.5+.15,t:Math.random()*Math.PI*2
+}));
+const SHOOTS=[];
+function drawBG(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  [[canvas.width*.75,canvas.height*.25,350,'rgba(14,165,233,.05)'],[canvas.width*.2,canvas.height*.7,280,'rgba(245,158,11,.03)']].forEach(([cx,cy,r,c])=>{
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+    g.addColorStop(0,c);g.addColorStop(1,'transparent');
+    ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
+  });
+  STARS.forEach(s=>{
+    s.t+=.018;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(200,220,255,${s.o*(0.65+0.35*Math.sin(s.t))})`;ctx.fill();
+    s.y+=s.s;if(s.y>canvas.height){s.y=0;s.x=Math.random()*canvas.width}
+  });
+  if(Math.random()<.008)SHOOTS.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height*.4,len:Math.random()*100+50,spd:Math.random()*5+4,op:1});
+  for(let i=SHOOTS.length-1;i>=0;i--){
+    const s=SHOOTS[i],a=Math.PI/4;
+    const g=ctx.createLinearGradient(s.x-Math.cos(a)*s.len,s.y-Math.sin(a)*s.len,s.x,s.y);
+    g.addColorStop(0,'transparent');g.addColorStop(1,`rgba(200,220,255,${s.op})`);
+    ctx.beginPath();ctx.moveTo(s.x-Math.cos(a)*s.len,s.y-Math.sin(a)*s.len);ctx.lineTo(s.x,s.y);
+    ctx.strokeStyle=g;ctx.lineWidth=1.2;ctx.stroke();
+    s.x+=Math.cos(a)*s.spd;s.y+=Math.sin(a)*s.spd;s.op-=.018;
+    if(s.op<=0)SHOOTS.splice(i,1);
+  }
+  requestAnimationFrame(drawBG);
+}
+drawBG();
+
+// SCROLL REVEAL + BARS + COUNTERS
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.classList.add('on');
+    e.target.querySelectorAll('.bar-fill').forEach(b=>b.style.transform=`scaleX(${b.dataset.w})`);
+    e.target.querySelectorAll('[data-to]').forEach(el=>{
+      const to=+el.dataset.to,suffix=el.querySelector('span')?.outerHTML||'';
+      let n=0;
+      const t=setInterval(()=>{n=Math.min(n+to/40,to);el.innerHTML=Math.floor(n)+suffix;if(n>=to)clearInterval(t)},40);
+    });
+    io.unobserve(e.target);
+  });
+},{threshold:.15});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>io.observe(el));
+
+// TILT
+document.querySelectorAll('.tech-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`perspective(700px) rotateX(${-y*7}deg) rotateY(${x*7}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave',()=>card.style.transform='');
+});
+
+// EDU GLOW
+document.querySelectorAll('.edu-card').forEach(c=>{
+  c.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect();
+    c.style.background=`radial-gradient(180px at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(14,165,233,.09),#0b1a2e 60%)`;
+  });
+  c.addEventListener('mouseleave',()=>c.style.background='');
+});
+</script>
+</body>
+</html>
   --blue:#1a6cf0;--sky:#4da6ff;--gold:#d4a94a;--gold2:#f0c96a;
   --white:#f0f4ff;--muted:#5a7499;--border:rgba(74,140,255,0.15);--glow:rgba(26,108,240,0.4);
 }
